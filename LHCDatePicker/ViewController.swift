@@ -17,7 +17,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         let a = LHCDatepicker(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight), 起始时间: "2017-01-01")
-        a.dateType = .年月
+        a.dateType = .年月日
         view.addSubview(a)
         
     }
@@ -84,7 +84,14 @@ class LHCDatepicker: UIView {
             日数组.append(item)
         }
         
-//        minDate =
+        guard dateType == .年月日 else {return}
+        minDate = 返回某日Date(年月日: 起始时间)
+        maxDate = Date()
+        
+        if let 最晚日期 = maxDate {
+            
+        }
+        
         
     }
     
@@ -231,6 +238,12 @@ class LHCDatepicker: UIView {
             return ("1970", 1970)
         }
     }
+    
+    private func 返回某日Date(年月日: String) -> Date? {
+        let formate = DateFormatter()
+        formate.dateFormat = "yyyy-MM-dd"
+        return formate.date(from: 年月日)
+    }
 }
 
 extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -296,7 +309,7 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
     
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if component == 1 {
+        if component == 1 { //滑动月份
             
             let month = 月份数组[row]
             
@@ -316,8 +329,12 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
                 pickerView.reloadComponent(2)
             }
             
+        }else if component == 0 { //滑动年份
+            
+            
         }
         
+        //返回值
         if component == 0 {
             选中年 = "\(年份数组[row])"
         }else if component == 1 {
