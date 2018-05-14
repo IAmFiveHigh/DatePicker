@@ -79,6 +79,20 @@ class LHCDatepicker: UIView {
         let frame = CGRect(x: 0, y: 45, width: self.frame.size.width, height: self.frame.size.height - 45)
         datepicker.frame = frame
         
+        datepicker.selectRow(年份数组.count - 1, inComponent: 0, animated: true)
+
+        switch dateType {
+        case .年月:
+            datepicker.selectRow(返回当前月份().1 - 1, inComponent: 1, animated: true)
+        case .年月日:
+            datepicker.selectRow(返回当前月份().1 - 1, inComponent: 1, animated: true)
+            datepicker.selectRow(返回当前日期().1 - 1, inComponent: 2, animated: true)
+        default:
+            print("")
+        }
+        
+        
+        
         addSubview(datepicker)
     }
     
@@ -93,13 +107,13 @@ class LHCDatepicker: UIView {
         }
     }
     
-    func 返回当前日期字符串(dateFormate: String = "yyyy-MM-dd") -> String {
+    private func 返回当前日期字符串(dateFormate: String = "yyyy-MM-dd") -> String {
         let formate = DateFormatter()
         formate.dateFormat = dateFormate
         return formate.string(from: Date())
     }
     
-    func 返回一个月前日期字符串(dateFormate: String = "yyyy-MM-dd") -> String {
+    private func 返回一个月前日期字符串(dateFormate: String = "yyyy-MM-dd") -> String {
         let formate = DateFormatter()
         formate.dateFormat = dateFormate
         
@@ -108,12 +122,36 @@ class LHCDatepicker: UIView {
         
     }
     
-    func 返回七天前日期字符串(dateFormate: String = "yyyy-MM-dd") -> String {
+    private func 返回七天前日期字符串(dateFormate: String = "yyyy-MM-dd") -> String {
         let formate = DateFormatter()
         formate.dateFormat = dateFormate
         
         let lastMonth = Date(timeIntervalSinceNow: -7 * 24 * 60 * 60)
         return formate.string(from: lastMonth)
+    }
+    
+    private func 返回当前日期() -> (String, Int) {
+        let formate = DateFormatter()
+        formate.dateFormat = "d"
+        
+        let day = formate.string(from: Date())
+        return (day, Int(day)!)
+    }
+    
+    private func 返回当前月份() -> (String, Int) {
+        let formate = DateFormatter()
+        formate.dateFormat = "M"
+        
+        let day = formate.string(from: Date())
+        return (day, Int(day)!)
+    }
+
+    private func 返回当前年份() -> (String, Int) {
+        let formate = DateFormatter()
+        formate.dateFormat = "yyyy"
+        
+        let day = formate.string(from: Date())
+        return (day, Int(day)!)
     }
 }
 
