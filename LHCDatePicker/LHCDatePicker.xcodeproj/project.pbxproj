@@ -13,6 +13,7 @@
 		35992B7320A940A9001D1F52 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 35992B7120A940A9001D1F52 /* LaunchScreen.storyboard */; };
 		35992B7B20A940EC001D1F52 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35992B7A20A940EC001D1F52 /* ViewController.swift */; };
 		35992B7D20A973DC001D1F52 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35992B7C20A973DB001D1F52 /* UIColor+Extension.swift */; };
+		35992B8020A98A57001D1F52 /* LHCDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35992B7F20A98A57001D1F52 /* LHCDatePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		35992B7420A940A9001D1F52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35992B7A20A940EC001D1F52 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = SOURCE_ROOT; };
 		35992B7C20A973DB001D1F52 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		35992B7F20A98A57001D1F52 /* LHCDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LHCDatePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 		35992B6720A940A8001D1F52 /* LHCDatePicker */ = {
 			isa = PBXGroup;
 			children = (
+				35992B7E20A98A44001D1F52 /* DatePicker */,
 				35992B7A20A940EC001D1F52 /* ViewController.swift */,
 				35992B7C20A973DB001D1F52 /* UIColor+Extension.swift */,
 				35992B6820A940A8001D1F52 /* AppDelegate.swift */,
@@ -65,6 +68,14 @@
 				35992B7420A940A9001D1F52 /* Info.plist */,
 			);
 			path = LHCDatePicker;
+			sourceTree = "<group>";
+		};
+		35992B7E20A98A44001D1F52 /* DatePicker */ = {
+			isa = PBXGroup;
+			children = (
+				35992B7F20A98A57001D1F52 /* LHCDatePicker.swift */,
+			);
+			path = DatePicker;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				35992B7D20A973DC001D1F52 /* UIColor+Extension.swift in Sources */,
+				35992B8020A98A57001D1F52 /* LHCDatePicker.swift in Sources */,
 				35992B7B20A940EC001D1F52 /* ViewController.swift in Sources */,
 				35992B6920A940A8001D1F52 /* AppDelegate.swift in Sources */,
 			);
