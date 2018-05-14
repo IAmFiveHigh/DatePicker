@@ -8,11 +8,18 @@
 
 import UIKit
 
+let screenWidth = UIScreen.main.bounds.width
+let screenHeight = UIScreen.main.bounds.height
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let a = LHCDatepicker(frame: CGRect(x: 0, y: screenHeight - 260, width: screenWidth, height: 260))
+        view.addSubview(a)
+        
+        
     }
 
 }
@@ -27,6 +34,7 @@ class LHCDatepicker: UIView {
     
     var dateType: 日期格式 = .年月日
     
+    private let 月份数组 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     private var 年份数组 = [Int]()
     private var 日数组 = [Int]()
     private let datepicker = UIPickerView()
@@ -63,8 +71,13 @@ class LHCDatepicker: UIView {
     
     private func setupUI() {
         
+        backgroundColor = UIColor.white
+        
         datepicker.dataSource = self
         datepicker.delegate = self
+        
+        let frame = CGRect(x: 0, y: 45, width: self.frame.size.width, height: self.frame.size.height - 45)
+        datepicker.frame = frame
         
         addSubview(datepicker)
     }
@@ -137,6 +150,48 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
             }else {
                 return 日数组.count
             }
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        switch dateType {
+        case .年:
+            return "\(年份数组[row])"
+        case .年月:
+            if component == 0 {
+                return "\(年份数组[row])"
+            }else {
+                return "\(月份数组[row])"
+            }
+        case .年月日:
+            if component == 0 {
+                return "\(年份数组[row])"
+            }else if component == 1 {
+                return "\(月份数组[row])"
+            }else {
+                return "\(日数组[row])"
+            }
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if component == 1 {
+            
+            let month = 月份数组[row]
+            
+            let dateFormate = DateFormatter()
+            dateFormate.dateFormat = "yyyy-M"
+            
+            let date = dateFormate.date(from: "2018-\(month)")
+            
+            let upper = 获取一个月的所有天(月: date!)
+            
+            日数组.removeAll()
+            for item in 1...upper {
+                日数组.append(item)
+            }
+            pickerView.reloadComponent(2)
         }
     }
 
