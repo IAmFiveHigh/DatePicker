@@ -27,19 +27,25 @@ class LHCDatepicker: UIView {
     
     var dateType: 日期格式 = .年月日
     
-    private let 月份数组 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    private var 月份数组 = [Int]()
     private var 年份数组 = [Int]()
     private var 日数组 = [Int]()
     private let datepicker = UIPickerView()
-    private let calendar = NSCalendar(identifier: .gregorian)
-    private let dateformater = DateFormatter()
     
     var maxDate: Date?
     var minDate: Date?
     
+    private var 最早年月日: (年: Int, 月: Int, 日: Int) = (0,0,0)
+    private var 最晚年月日: (年: Int, 月: Int, 日: Int) = (0,0,0)
+    
+    
     private var 选中年 = ""
     private var 选中月 = ""
     private var 选中日 = ""
+    
+    private var section0 = 0
+    private var section1 = 0
+    private var section2 = 0
     
     weak var delegate: LHCDatePickerDelegate?
     
@@ -63,20 +69,17 @@ class LHCDatepicker: UIView {
             年份数组.append(item)
         }
         
-        let day = 获取一个月的所有天(月: Date())
-        for item in 1...day {
-            日数组.append(item)
-        }
-        
-        guard dateType == .年月日 else {return}
         minDate = 返回某日Date(年月日: 起始时间)
+        设置最早()
+        
         maxDate = Date()
+        设置最晚()
         
-        if let 最晚日期 = maxDate {
-            
-        }
+        选中年 = 返回当前年份().0
+        选中月 = 返回当前月份().0
         
-        
+        生成月数组()
+        生成日数组()
     }
     
     private func setupUI() {
@@ -253,13 +256,13 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
                 
                 return 年份数组.count
             }else {
-                return 12
+                return 月份数组.count
             }
         case .年月日:
             if component == 0 {
                 return 年份数组.count
             }else if component == 1 {
-                return 12
+                return 月份数组.count
             }else {
                 return 日数组.count
             }
@@ -272,19 +275,25 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
         switch dateType {
         case .年:
             str = "\(年份数组[row])年"
+            选中年 = "\(年份数组[row])"
         case .年月:
             if component == 0 {
                 str = "\(年份数组[row])年"
+                选中年 = "\(年份数组[row])"
             }else {
                 str = "\(月份数组[row])月"
+                选中月 = "\(月份数组[row])"
             }
         case .年月日:
             if component == 0 {
                 str = "\(年份数组[row])年"
+                选中年 = "\(年份数组[row])"
             }else if component == 1 {
                 str = "\(月份数组[row])月"
+                选中月 = "\(月份数组[row])"
             }else {
                 str = "\(日数组[row])日"
+                选中日 = "\(日数组[row])"
             }
         }
         
@@ -293,43 +302,109 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
     
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if component == 1 { //滑动月份
-            
-            let month = 月份数组[row]
-            
-            let dateFormate = DateFormatter()
-            dateFormate.dateFormat = "yyyy-M"
-            
-            let date = dateFormate.date(from: "2018-\(month)")
-            
-            let upper = 获取一个月的所有天(月: date!)
-            
-            日数组.removeAll()
-            for item in 1...upper {
-                日数组.append(item)
-            }
-            
-            if dateType == .年月日 {
-                pickerView.reloadComponent(2)
-            }
-            
-        }else if component == 0 { //滑动年份
-            
-            
-        }
-        
         //返回值
         if component == 0 {
             选中年 = "\(年份数组[row])"
+            生成月数组()
+            pickerView.reloadComponent(1)
+//            选中月 = "\(月份数组[row])"
+            生成日数组()
+            pickerView.reloadComponent(2)
+//            选中日 = "\(日数组[row])"
         }else if component == 1 {
             选中月 = "\(月份数组[row])"
+            生成日数组()
+            pickerView.reloadComponent(2)
+//            选中日 = "\(日数组[row])"
         }else {
-            选中日 = "\(日数组[row])"
+//            选中日 = "\(日数组[row])"
         }
+        
     }
     
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 40
+    }
+    
+    //MARK: 处理最晚日期 最早日期 很复杂
+    private func 设置最晚() {
+        if let 最晚 = maxDate {
+            最晚年月日 = 分解返回年月日(Date: 最晚)
+            
+        }
+    }
+    
+    private func 设置最早() {
+        if let 最早 = minDate {
+            最早年月日 = 分解返回年月日(Date: 最早)
+        }
+    }
+    
+    private func 生成月数组() {
+        
+        guard let 年 = Int(选中年) else {return}
+        月份数组.removeAll()
+        
+        if 年 == 最早年月日.年 {
+            
+            for i in (最早年月日.月)...12 {
+                月份数组.append(i)
+            }
+        }else if 年 == 最晚年月日.年 {
+            for i in 1...(最晚年月日.月) {
+                月份数组.append(i)
+            }
+        }else {
+            月份数组 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        }
+    }
+    
+    private func 生成日数组() {
+        
+        guard let 月 = Int(选中月) else {return}
+        guard let 年 = Int(选中年) else {return}
+        日数组.removeAll()
+        
+        let formate = DateFormatter()
+        formate.dateFormat = "yyyy-MM"
+        let date = formate.date(from: "\(年)-\(月)")
+        
+        for i in 1...获取一个月的所有天(月: date!) {
+            日数组.append(i)
+        }
+        
+        if 年 == 最早年月日.年 {
+            if 月 == 最早年月日.月 {
+                日数组.removeAll()
+                for i in (最早年月日.日)...(获取一个月的所有天(月: date!)) {
+                    日数组.append(i)
+                }
+            }
+            
+        }else if 年 == 最晚年月日.年 {
+            
+            if 月 == 最晚年月日.月 {
+                日数组.removeAll()
+                let upperDay = 获取一个月的所有天(月: date!)
+
+                let range = upperDay > 最晚年月日.日 ? 最晚年月日.日 : upperDay
+                for i in 1...range {
+                    日数组.append(i)
+                }
+            }
+        }
+        
+    }
+    
+    private func 分解返回年月日(Date: Date) -> (年: Int, 月: Int, 日: Int) {
+        
+        let formate = DateFormatter()
+        formate.dateFormat = "yyyy-MM-dd"
+        
+        let array = formate.string(from: Date).components(separatedBy: "-")
+        guard array.count == 3 else {return (0,0,0)}
+        
+        return (Int(array[0])!, Int(array[1])!, Int(array[2])!)
     }
     
 }
