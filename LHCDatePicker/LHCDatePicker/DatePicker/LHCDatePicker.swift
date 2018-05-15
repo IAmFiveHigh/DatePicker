@@ -23,7 +23,7 @@ class LHCDatepicker: UIView {
     
     
     private let shadow = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-    private let 确定按钮 = UIButton(frame: CGRect(x: screenWidth - 55, y: screenHeight - 260, width: 55, height: 45))
+    private let 确定按钮 = UIButton()
     
     var dateType: 日期格式 = .年月日
     
@@ -67,15 +67,20 @@ class LHCDatepicker: UIView {
     private var 选中月 = ""
     private var 选中日 = ""
     
+    enum position {
+        case 底部
+        case 中心
+    }
+    
     
     weak var delegate: LHCDatePickerDelegate?
     
-    init(frame: CGRect, 起始时间: String = "1970-01-01") {
+    init(frame: CGRect, 起始时间: String = "1970-01-01", position: position) {
         super.init(frame: frame)
         
         启动日历(起始时间: 起始时间)
         
-        setupUI()
+        setupUI(位置: position)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -103,29 +108,33 @@ class LHCDatepicker: UIView {
         生成日数组()
     }
     
-    private func setupUI() {
+    private func setupUI(位置: position) {
         
         shadow.backgroundColor = UIColor(hexColor: "000000")
         shadow.alpha = 0.2
         shadow.addTarget(self, action: #selector(点击取消), for: .touchUpInside)
         addSubview(shadow)
         
-        let whiteLine = UIView(frame: CGRect(x: 0, y: screenHeight - 260, width: screenWidth, height: 45))
+        let whiteLine = UIView(frame: CGRect(x: 位置 == .底部 ? 0 : 12, y: 位置 == .底部 ? screenHeight - 260 : screenHeight / 2 - 130, width: 位置 == .底部 ? screenWidth : screenWidth - 12 * 2, height: 260))
         whiteLine.backgroundColor = UIColor.white
+        if 位置 == .中心 {
+            whiteLine.layer.cornerRadius = 10
+            whiteLine.layer.masksToBounds = true
+        }
         addSubview(whiteLine)
         
         确定按钮.setTitle("确定", for: .normal)
-        确定按钮.backgroundColor = UIColor.white
+        确定按钮.frame = CGRect(x: 位置 == .底部 ? screenWidth - 55 : screenWidth - 67, y: 位置 == .底部 ? screenHeight - 260 : screenHeight / 2 - 130, width: 55, height: 45)
         确定按钮.setTitleColor(UIColor(hexColor: "1A1917"), for: .normal)
         确定按钮.addTarget(self, action: #selector(点击确定), for: .touchUpInside)
         addSubview(确定按钮)
         
-        datepicker.backgroundColor = UIColor.white
         datepicker.dataSource = self
         datepicker.delegate = self
         
-        let frame = CGRect(x: 0, y: screenHeight - 215, width: screenWidth, height: 215)
+        let frame = CGRect(x: 位置 == .底部 ? 0 : 12, y: 位置 == .底部 ? screenHeight - 215 : screenHeight / 2 - 130 + 45, width: 位置 == .底部 ? screenWidth : screenWidth - 12 * 2, height: 215)
         datepicker.frame = frame
+        
         
         datepicker.selectRow(年份数组.count - 1, inComponent: 0, animated: true)
         
@@ -155,7 +164,7 @@ class LHCDatepicker: UIView {
         
         addSubview(datepicker)
         
-        let grayLine = UIView(frame: CGRect(x: 0, y: screenHeight - 215, width: screenWidth, height: 1))
+        let grayLine = UIView(frame: CGRect(x: 位置 == .底部 ? 0 : 12, y: 位置 == .底部 ? screenHeight - 215 : screenHeight / 2 - 130 + 45, width: 位置 == .底部 ? screenWidth : screenWidth - 12 * 2, height: 0.5))
         grayLine.backgroundColor = UIColor(hexColor: "CCCCCC")
         addSubview(grayLine)
     }

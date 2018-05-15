@@ -6,9 +6,9 @@
 -直接把LHCDatePicker.swift文件拖进工程
 
 ## 使用
-init方法创建 可以设置起始日期参数
+init方法创建 可以设置起始日期参数, 两种位置模式: 中心和底部
 ``` swift
-let a = LHCDatepicker(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight), 起始时间: "2018-3-20")
+let a = LHCDatepicker(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight), 起始时间: "2018-3-20", position: .中心)
 ```
 因为自带背景shadow 所以设置大小建议为屏幕宽高
 
@@ -42,3 +42,5 @@ a.dateType = .年月
         formate.dateFormat = "yyyy-M-dd"
         a.maxDate = formate.date(from: time)!
 ```
+
+

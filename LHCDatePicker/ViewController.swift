@@ -13,14 +13,14 @@ let screenHeight = UIScreen.main.bounds.height
 
 class ViewController: UIViewController {
 
-    let a = LHCDatepicker(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight), 起始时间: "2018-3-20")
+    let a = LHCDatepicker(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight), 起始时间: "2018-3-20", position: .中心)
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
-        a.dateType = .年月
+        a.dateType = .年月日
         a.delegate = self
         view.addSubview(a)
         
