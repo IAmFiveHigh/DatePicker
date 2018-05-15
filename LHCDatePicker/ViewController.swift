@@ -41,6 +41,7 @@ class ViewController: UIViewController {
         let formate = DateFormatter()
         formate.dateFormat = "yyyy-M-dd"
         a.minDate = formate.date(from: time)!
+        a.reload选中年月日()
     }
     
     @objc private func 修改最晚日期() {
@@ -48,6 +49,7 @@ class ViewController: UIViewController {
         let formate = DateFormatter()
         formate.dateFormat = "yyyy-M-dd"
         a.maxDate = formate.date(from: time)!
+        a.reload选中年月日()
     }
 
 }

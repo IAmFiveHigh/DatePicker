@@ -3,7 +3,7 @@
 
 
 ## 安装
--直接把LHCDatePicker.swift文件拖进工程
+-直接把LHCDatePicker.swift文件拖进工程，还有UIColor+Extension.swift文件拖入工程
 
 ## 使用
 init方法创建 可以设置起始日期参数, 两种位置模式: 中心和底部
@@ -34,6 +34,7 @@ a.dateType = .年月
         let formate = DateFormatter()
         formate.dateFormat = "yyyy-M-dd"
         a.minDate = formate.date(from: time)!
+        a.reload选中年月日()
 ```
 -设置最晚日期
 ```swift
@@ -41,6 +42,8 @@ a.dateType = .年月
         let formate = DateFormatter()
         formate.dateFormat = "yyyy-M-dd"
         a.maxDate = formate.date(from: time)!
+        a.reload选中年月日()
 ```
+-最后要调用reload选中年月日方法
 
 

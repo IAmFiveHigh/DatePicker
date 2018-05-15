@@ -35,26 +35,12 @@ class LHCDatepicker: UIView {
     var maxDate: Date? {
         didSet {
             设置最晚(date: maxDate!)
-            选中年 = 返回当前年份().0
-            选中月 = 返回当前月份().0
-            
-            生成月数组()
-            生成日数组()
-            datepicker.reloadAllComponents()
-            
-            
+        
         }
     }
     var minDate: Date? {
         didSet {
             设置最早(date: minDate!)
-            选中年 = 返回当前年份().0
-            选中月 = 返回当前月份().0
-            
-            生成月数组()
-            生成日数组()
-            datepicker.reloadAllComponents()
-            
             
         }
     }
@@ -94,7 +80,6 @@ class LHCDatepicker: UIView {
         for item in (yearStr.1)...(返回当前年份().1) {
             年份数组.append(item)
         }
-        
         
         设置最早(date: 返回某日Date(年月日: 起始时间)!)
         
@@ -471,6 +456,33 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
         guard array.count == 3 else {return (0,0,0)}
         
         return (Int(array[0])!, Int(array[1])!, Int(array[2])!)
+    }
+    
+    
+    func reload选中年月日() {
+        
+        生成月数组()
+        生成日数组()
+        
+        datepicker.reloadAllComponents()
+        
+        switch dateType {
+        case .年:
+            datepicker.selectRow(0, inComponent: 0, animated: true)
+            选中年 = "\(年份数组[datepicker.selectedRow(inComponent: 0)])"
+        case .年月:
+            datepicker.selectRow(0, inComponent: 0, animated: true)
+            datepicker.selectRow(0, inComponent: 1, animated: true)
+            选中年 = "\(年份数组[datepicker.selectedRow(inComponent: 0)])"
+            选中月 = "\(月份数组[datepicker.selectedRow(inComponent: 1)])"
+        case .年月日:
+            datepicker.selectRow(0, inComponent: 0, animated: true)
+            datepicker.selectRow(0, inComponent: 1, animated: true)
+            datepicker.selectRow(0, inComponent: 2, animated: true)
+            选中年 = "\(年份数组[datepicker.selectedRow(inComponent: 0)])"
+            选中月 = "\(月份数组[datepicker.selectedRow(inComponent: 1)])"
+            选中日 = "\(日数组[datepicker.selectedRow(inComponent: 2)])"
+        }
     }
     
 }
