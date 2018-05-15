@@ -32,8 +32,32 @@ class LHCDatepicker: UIView {
     private var 日数组 = [Int]()
     private let datepicker = UIPickerView()
     
-    var maxDate: Date?
-    var minDate: Date?
+    var maxDate: Date? {
+        didSet {
+            设置最晚(date: maxDate!)
+            选中年 = 返回当前年份().0
+            选中月 = 返回当前月份().0
+            
+            生成月数组()
+            生成日数组()
+            datepicker.reloadAllComponents()
+            
+            
+        }
+    }
+    var minDate: Date? {
+        didSet {
+            设置最早(date: minDate!)
+            选中年 = 返回当前年份().0
+            选中月 = 返回当前月份().0
+            
+            生成月数组()
+            生成日数组()
+            datepicker.reloadAllComponents()
+            
+            
+        }
+    }
     
     private var 最早年月日: (年: Int, 月: Int, 日: Int) = (0,0,0)
     private var 最晚年月日: (年: Int, 月: Int, 日: Int) = (0,0,0)
@@ -43,9 +67,6 @@ class LHCDatepicker: UIView {
     private var 选中月 = ""
     private var 选中日 = ""
     
-    private var section0 = 0
-    private var section1 = 0
-    private var section2 = 0
     
     weak var delegate: LHCDatePickerDelegate?
     
@@ -69,11 +90,11 @@ class LHCDatepicker: UIView {
             年份数组.append(item)
         }
         
-        minDate = 返回某日Date(年月日: 起始时间)
-        设置最早()
         
-        maxDate = Date()
-        设置最晚()
+        设置最早(date: 返回某日Date(年月日: 起始时间)!)
+        
+        
+        设置最晚(date: Date())
         
         选中年 = 返回当前年份().0
         选中月 = 返回当前月份().0
@@ -110,10 +131,24 @@ class LHCDatepicker: UIView {
         
         switch dateType {
         case .年月:
-            datepicker.selectRow(返回当前月份().1 - 1, inComponent: 1, animated: true)
+            if 返回当前年份().1 == 最早年月日.年 {
+                datepicker.selectRow(返回当前月份().1 - 最早年月日.年, inComponent: 1, animated: true)
+            }else {
+                datepicker.selectRow(返回当前月份().1 - 1, inComponent: 1, animated: true)
+            }
+            
         case .年月日:
-            datepicker.selectRow(返回当前月份().1 - 1, inComponent: 1, animated: true)
-            datepicker.selectRow(返回当前日期().1 - 1, inComponent: 2, animated: true)
+            if 返回当前年份().1 == 最早年月日.年 {
+                datepicker.selectRow(返回当前月份().1 - 最早年月日.月, inComponent: 1, animated: true)
+            }else {
+                datepicker.selectRow(返回当前月份().1 - 1, inComponent: 1, animated: true)
+            }
+            
+            if 返回当前月份().1 == 最早年月日.月 {
+                datepicker.selectRow(返回当前日期().1 - 最早年月日.日, inComponent: 2, animated: true)
+            }else {
+                datepicker.selectRow(返回当前日期().1 - 1, inComponent: 2, animated: true)
+            }
         default:
             print("")
         }
@@ -275,25 +310,25 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
         switch dateType {
         case .年:
             str = "\(年份数组[row])年"
-            选中年 = "\(年份数组[row])"
+            
         case .年月:
             if component == 0 {
                 str = "\(年份数组[row])年"
-                选中年 = "\(年份数组[row])"
+//                选中年 = "\(年份数组[row])"
             }else {
                 str = "\(月份数组[row])月"
-                选中月 = "\(月份数组[row])"
+//                选中月 = "\(月份数组[row])"
             }
         case .年月日:
             if component == 0 {
                 str = "\(年份数组[row])年"
-                选中年 = "\(年份数组[row])"
+//                选中年 = "\(年份数组[row])"
             }else if component == 1 {
                 str = "\(月份数组[row])月"
-                选中月 = "\(月份数组[row])"
+//                选中月 = "\(月份数组[row])"
             }else {
                 str = "\(日数组[row])日"
-                选中日 = "\(日数组[row])"
+//                选中日 = "\(日数组[row])"
             }
         }
         
@@ -307,17 +342,20 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
             选中年 = "\(年份数组[row])"
             生成月数组()
             pickerView.reloadComponent(1)
-//            选中月 = "\(月份数组[row])"
+            pickerView.selectRow(0, inComponent: 1, animated: true)
+            选中月 = "\(月份数组[0])"
             生成日数组()
             pickerView.reloadComponent(2)
-//            选中日 = "\(日数组[row])"
+            pickerView.selectRow(0, inComponent: 2, animated: true)
+            选中日 = "\(日数组[0])"
         }else if component == 1 {
             选中月 = "\(月份数组[row])"
             生成日数组()
             pickerView.reloadComponent(2)
-//            选中日 = "\(日数组[row])"
+            pickerView.selectRow(0, inComponent: 2, animated: true)
+            选中日 = "\(日数组[0])"
         }else {
-//            选中日 = "\(日数组[row])"
+            选中日 = "\(日数组[row])"
         }
         
     }
@@ -327,17 +365,13 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     //MARK: 处理最晚日期 最早日期 很复杂
-    private func 设置最晚() {
-        if let 最晚 = maxDate {
-            最晚年月日 = 分解返回年月日(Date: 最晚)
-            
-        }
+    private func 设置最晚(date: Date) {
+        最晚年月日 = 分解返回年月日(Date: date)
     }
     
-    private func 设置最早() {
-        if let 最早 = minDate {
-            最早年月日 = 分解返回年月日(Date: 最早)
-        }
+    private func 设置最早(date: Date) {
+        最早年月日 = 分解返回年月日(Date: date)
+        
     }
     
     private func 生成月数组() {
@@ -345,18 +379,25 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
         guard let 年 = Int(选中年) else {return}
         月份数组.removeAll()
         
-        if 年 == 最早年月日.年 {
-            
-            for i in (最早年月日.月)...12 {
-                月份数组.append(i)
-            }
-        }else if 年 == 最晚年月日.年 {
-            for i in 1...(最晚年月日.月) {
+        if 年 == 最早年月日.年 && 年 == 最晚年月日.年 {
+            for i in (最早年月日.月)...(最晚年月日.月) {
                 月份数组.append(i)
             }
         }else {
-            月份数组 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            if 年 == 最早年月日.年 {
+                
+                for i in (最早年月日.月)...12 {
+                    月份数组.append(i)
+                }
+            }else if 年 == 最晚年月日.年 {
+                for i in 1...(最晚年月日.月) {
+                    月份数组.append(i)
+                }
+            }else {
+                月份数组 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            }
         }
+        
     }
     
     private func 生成日数组() {
@@ -373,6 +414,7 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
             日数组.append(i)
         }
         
+        
         if 年 == 最早年月日.年 {
             if 月 == 最早年月日.月 {
                 日数组.removeAll()
@@ -381,7 +423,8 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
                 }
             }
             
-        }else if 年 == 最晚年月日.年 {
+        }
+        if 年 == 最晚年月日.年 {
             
             if 月 == 最晚年月日.月 {
                 日数组.removeAll()
@@ -391,6 +434,15 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
                 for i in 1...range {
                     日数组.append(i)
                 }
+            }
+        }
+        
+        if 年 == 最早年月日.年 && 年 == 最晚年月日.年 && 月 == 最早年月日.月 && 月 == 最晚年月日.月 {
+            let upperDay = 获取一个月的所有天(月: date!)
+            let range = upperDay > 最晚年月日.日 ? 最晚年月日.日 : upperDay
+            日数组.removeAll()
+            for i in (最早年月日.日)...range {
+                日数组.append(i)
             }
         }
         

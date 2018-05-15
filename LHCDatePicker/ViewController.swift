@@ -13,15 +13,40 @@ let screenHeight = UIScreen.main.bounds.height
 
 class ViewController: UIViewController {
 
+    let a = LHCDatepicker(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight), 起始时间: "2018-3-20")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let a = LHCDatepicker(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight), 起始时间: "2017-11-20")
+        
         a.dateType = .年月日
         a.delegate = self
         view.addSubview(a)
         
+        let btn1 = UIButton(frame: CGRect(x: 20, y: 100, width: 100, height: 50))
+        btn1.addTarget(self, action: #selector(修改最早日期), for: .touchUpInside)
+        btn1.setTitle("修改最早日期", for: .normal)
+        view.addSubview(btn1)
         
+        let btn2 = UIButton(frame: CGRect(x: 200, y: 100, width: 100, height: 50))
+        btn2.addTarget(self, action: #selector(修改最晚日期), for: .touchUpInside)
+        btn2.setTitle("修改最晚日期", for: .normal)
+        view.addSubview(btn2)
+        
+    }
+    
+    @objc private func 修改最早日期() {
+        let time = "2018-4-15"
+        let formate = DateFormatter()
+        formate.dateFormat = "yyyy-M-dd"
+        a.minDate = formate.date(from: time)!
+    }
+    
+    @objc private func 修改最晚日期() {
+        let time = "2018-5-10"
+        let formate = DateFormatter()
+        formate.dateFormat = "yyyy-M-dd"
+        a.maxDate = formate.date(from: time)!
     }
 
 }
