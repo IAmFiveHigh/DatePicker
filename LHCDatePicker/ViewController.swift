@@ -15,20 +15,21 @@ class ViewController: UIViewController {
 
     let a = LHCDatepicker(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight), 起始时间: "2018-3-20")
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
-        a.dateType = .年月日
+        a.dateType = .年月
         a.delegate = self
         view.addSubview(a)
         
-        let btn1 = UIButton(frame: CGRect(x: 20, y: 100, width: 100, height: 50))
+        let btn1 = UIButton(frame: CGRect(x: 20, y: 100, width: 120, height: 50))
         btn1.addTarget(self, action: #selector(修改最早日期), for: .touchUpInside)
         btn1.setTitle("修改最早日期", for: .normal)
         view.addSubview(btn1)
         
-        let btn2 = UIButton(frame: CGRect(x: 200, y: 100, width: 100, height: 50))
+        let btn2 = UIButton(frame: CGRect(x: 200, y: 100, width: 120, height: 50))
         btn2.addTarget(self, action: #selector(修改最晚日期), for: .touchUpInside)
         btn2.setTitle("修改最晚日期", for: .normal)
         view.addSubview(btn2)

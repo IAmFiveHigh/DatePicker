@@ -345,15 +345,20 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
             pickerView.selectRow(0, inComponent: 1, animated: true)
             选中月 = "\(月份数组[0])"
             生成日数组()
-            pickerView.reloadComponent(2)
-            pickerView.selectRow(0, inComponent: 2, animated: true)
-            选中日 = "\(日数组[0])"
+            if dateType == .年月日 {
+                pickerView.reloadComponent(2)
+                pickerView.selectRow(0, inComponent: 2, animated: true)
+                选中日 = "\(日数组[0])"
+            }
         }else if component == 1 {
             选中月 = "\(月份数组[row])"
             生成日数组()
-            pickerView.reloadComponent(2)
-            pickerView.selectRow(0, inComponent: 2, animated: true)
-            选中日 = "\(日数组[0])"
+            
+            if dateType == .年月日 {
+                pickerView.reloadComponent(2)
+                pickerView.selectRow(0, inComponent: 2, animated: true)
+                选中日 = "\(日数组[0])"
+            }
         }else {
             选中日 = "\(日数组[row])"
         }
