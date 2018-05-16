@@ -88,6 +88,7 @@ class LHCDatepicker: UIView {
         
         选中年 = 返回当前年份().0
         选中月 = 返回当前月份().0
+        选中日 = 返回当前日期().0
         
         生成月数组()
         生成日数组()
@@ -174,11 +175,11 @@ class LHCDatepicker: UIView {
         if let delegate = delegate {
             switch dateType {
             case .年:
-                delegate.点击取消(date: 选中年)
+                delegate.点击确定(date: 选中年)
             case .年月:
-                delegate.点击取消(date: "\(选中年)-\(选中月)")
+                delegate.点击确定(date: "\(选中年)-\(选中月)")
             case .年月日:
-                delegate.点击取消(date: "\(选中年)-\(选中月)-\(选中日)")
+                delegate.点击确定(date: "\(选中年)-\(选中月)-\(选中日)")
             }
             
         }
@@ -308,21 +309,16 @@ extension LHCDatepicker: UIPickerViewDelegate, UIPickerViewDataSource {
         case .年月:
             if component == 0 {
                 str = "\(年份数组[row])年"
-//                选中年 = "\(年份数组[row])"
             }else {
                 str = "\(月份数组[row])月"
-//                选中月 = "\(月份数组[row])"
             }
         case .年月日:
             if component == 0 {
                 str = "\(年份数组[row])年"
-//                选中年 = "\(年份数组[row])"
             }else if component == 1 {
                 str = "\(月份数组[row])月"
-//                选中月 = "\(月份数组[row])"
             }else {
                 str = "\(日数组[row])日"
-//                选中日 = "\(日数组[row])"
             }
         }
         
